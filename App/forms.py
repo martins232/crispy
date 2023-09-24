@@ -62,28 +62,60 @@ class CandidateForm(forms.ModelForm):
         # widget=forms.TextInput(attrs={"placeholder":"Email Address",})
         widget=forms.TextInput(attrs={"placeholder":"Email Address", "type":"number"})
         )
+    experience = forms.BooleanField(label="I have experience", required=False)
     message = forms.CharField(
         label="About You",
         max_length=300,
-        widget=forms.Textarea(attrs={"placeholder":"Talk about yourself","rows":5})
+        required=False,
+        widget=forms.Textarea(attrs={"placeholder":"Talk about yourself","rows":4})
         
         )
+    
+    #METHOD 1 {GENDER}
+    # GENDER = (
+    #     ("M","Male"),
+    #     ("F","Female")
+    # )
+    # gender = forms.CharField(label="Gender", widget=forms.RadioSelect(choices=GENDER))
     
     
     class Meta:
         model = Candidate
         exclude =["created_at", "situation"]
         # fields = ["firstname", "lastname", "job", "email", "age","phone", "message"]
-    
-    
-     # Outside Widget 
+        
+        
+        SALARY = (
+            ("", "Salary expectation {month}"),
+            ("Between {$3000 and $4000}", "Between {$3000 and $4000}"),
+            ("Between {$4000 and $5000}", "Between {$4000 and $5000}"),
+            ("Between {$5000 and $7000}", "Between {$5000 and $7000}"),
+            ("Between {$7000 and $10000}", "Between {$7000 and $10000}")
+        )
+        
+        #METHOD 2 {GENDER}
+        GENDER = (
+            ("M","Male"),
+            ("F","Female")
+        )
+     # OUTSIDE WIDGETS 
      # Using Jquery and Jquery script tag to mask the phone number
         widgets ={
+            #Phone
             "phone" :forms.TextInput(
                 attrs={
-                    "style": "font-size:18px;",
+                    "style": "font-size:18px;", #CSS
                     "placeholder": "E.g: 0703-0000-000",
                     "data-mask": "+(234) 0000-0000-000",
                 }
-            )
+            ),
+            #Salary
+            "salary" :forms.Select(
+                choices=SALARY,
+                attrs={
+                    "class": "form-control", #BOOTSTRAP insde the form
+                }
+            ),
+            "gender":forms.RadioSelect(choices=GENDER, attrs={"class":"btn-check"}),
+            "smoker":forms.RadioSelect(attrs={"class":"btn-check"})
         }
