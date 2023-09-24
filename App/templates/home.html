@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container mt-3" style="width: 95%; font-size: 14px;">
+    <div class="card p-3 border-dark text-center alert alert-warning" styl="font-size: 18px;">
+        Frontend: FR-22 &nbsp; |&nbsp; Frontend: BA-10 &nbsp; | &nbsp; Fullstack: FU-22 
+    </div>
+    <form action="" method="post" class="card p-3 mt-5" novalidate>
+        {% csrf_token %}
+        
+        <div class="row">
+            <div class="col-4">
+                {{form.firstname|as_crispy_field}}
+            </div>
+            <div class="col-4">
+                {{form.lastname|as_crispy_field}}
+            </div>
+            <div class="col-4">
+                {{form.job|as_crispy_field}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                {{form.email|as_crispy_field}}
+            </div>
+            <div class="col-4">
+                {{form.age|as_crispy_field}}
+            </div>
+            <div class="col-4">
+                {{form.phone|as_crispy_field}}
+            </div>
+        </div>
+        
+        {{form.message|as_crispy_field}}
+        
+        
+        <button type="submit" class=" btn btn-outline-primary"style="width:90px;">Submit</button>
+    </form>
+
+    
+
+    {% for message in messages  %}
+        {% if message.tags == "success" %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{message}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+
+    {% endfor %}
+
+      
+</div>
+{% endblock %}
