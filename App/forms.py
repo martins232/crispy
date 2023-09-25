@@ -15,44 +15,54 @@ class CandidateForm(forms.ModelForm):
     
     #VALIDATION
     
-    # firstname will automatically be capitalized. This already been done in the models.py class
+    # firstname will automatically be capitalized. This already been done in the models.py class and also here too in widget
     firstname = forms.CharField(
         label="First name",
         min_length=3,
         max_length=50,
         # required=False,
         validators=[RegexValidator(r"^[a-zA-Z]*$", message="Only letters are allowed")], 
-        widget=forms.TextInput(attrs={"placeholder":"Enter First name"})
+        widget=forms.TextInput(attrs={
+            "placeholder":"Enter First name",
+            "style": "font-size : 13px; text-transform: capitalize;"            
+            })
         )  
-    # lastname will automatically be capitalized. This already been done in the models.py class
+    # Lastname will automatically be capitalized. This already been done in the models.py class and also here too in widget
     lastname = forms.CharField(
         label="Last name",
         min_length=3,
         max_length=50,
         # required=False,
         validators=[RegexValidator(r"^[a-zA-Z]*$", message="Only letters are allowed")], 
-        widget=forms.TextInput(attrs={"placeholder":"Enter Lastname name"})
-        )
-    # job code always in uppercase
+        widget=forms.TextInput(attrs={
+            "placeholder":"Enter Last name",
+            "style": "font-size : 13px; text-transform: capitalize;"            
+            })
+        )  
+    # Job code always in uppercase for the server as done above and also here too in widget
     job = UpperCase(
         label="Job code",
         min_length=5, max_length=5,
         widget=forms.TextInput(attrs={
             "placeholder":"Example : FR-22",
+            "style": "font-size : 13px; text-transform: uppercase;"
         })
     )
     
-    # email code always in lowercase
+    # Email code always in lowercase for the server as done above and also here too in widget
     email = LowerCase(
         label="Email",
         min_length=10,
         max_length=50,
         # required=False,
         validators=[RegexValidator(r"^[a-zA-Z0-9.+-_]+@[a-zA-Z0-9.+-_]+\.[a-zA-Z]*$", message="Enter a valid email address")], 
-        widget=forms.TextInput(attrs={"placeholder":"Email Address"})
+        widget=forms.TextInput(attrs={
+            "placeholder":"Email Address",
+            "style": "font-size : 13px; text-transform: lowercase;"
+            })
         )
     
-    # age must only be numbers and the length must not be less than 1 or greater than 3
+    # Age must only be numbers and the length must not be less than 1 or greater than 3
     age = forms.CharField(
         label="Age",
         min_length=1,
@@ -60,16 +70,35 @@ class CandidateForm(forms.ModelForm):
         # required=False,
         validators=[RegexValidator(r"^[0-9]{1,2}$", message="Enter a valid age")], 
         # widget=forms.TextInput(attrs={"placeholder":"Email Address",})
-        widget=forms.TextInput(attrs={"placeholder":"Email Address", "type":"number"})
+        widget=forms.TextInput(attrs={
+            "placeholder":"Age",
+            "style": "font-size : 13px;"})
         )
+    
+    #Experience
     experience = forms.BooleanField(label="I have experience", required=False)
+    
+    #message
     message = forms.CharField(
         label="About You",
         max_length=300,
         required=False,
-        widget=forms.Textarea(attrs={"placeholder":"Talk about yourself","rows":4})
+        widget=forms.Textarea(attrs={
+            "placeholder":"Talk about yourself",
+            "rows":4,
+            "style": "font-size : 13px;"})
         
         )
+    
+    # File (Upload)
+    file = forms.FileField(
+        required= True,
+        widget=forms.ClearableFileInput(
+            attrs={
+                "style": "font-size : 13px;"
+            }
+        )
+    )
     
     #METHOD 1 {GENDER}
     # GENDER = (
@@ -85,14 +114,14 @@ class CandidateForm(forms.ModelForm):
         # fields = ["firstname", "lastname", "job", "email", "age","phone", "message"]
         
         #Creating a controll for labels
-        
-        labels ={
-            "phone":"Enter Phone",
-            "salary":"What is your salary expectation",
-            "personality":"What is your personality",
-            "gender":"Select your gender",
-            "smoker":"Do you smoke?"
-        }
+        # How to change labels of fields
+        # labels ={
+        #     "phone":"Enter Phone",
+        #     "salary":"What is your salary expectation",
+        #     "personality":"What is your personality",
+        #     "gender":"Select your gender",
+        #     "smoker":"Do you smoke?"
+        # }
         
         SALARY = (
             ("", "Salary expectation {month}"),
@@ -113,7 +142,7 @@ class CandidateForm(forms.ModelForm):
             #Phone
             "phone" :forms.TextInput(
                 attrs={
-                    "style": "font-size:18px;", #CSS
+                    "style": "font-size:14px; ", #CSS
                     "placeholder": "E.g: 0703-0000-000",
                     "data-mask": "+(234) 0000-0000-000",
                 }
@@ -123,44 +152,45 @@ class CandidateForm(forms.ModelForm):
                 choices=SALARY,
                 attrs={
                     "class": "form-control", #BOOTSTRAP insde the form
+                    "style": "font-size : 13px;",
                 }
-            ),
-            "gender":forms.RadioSelect(choices=GENDER, attrs={"class":"btn-check"}),
+            ), 
+            "personality": forms.Select(attrs={"style": "font-size : 13px;"}),
+            "gender":forms.RadioSelect(choices=GENDER, attrs={"class":"btn-check",}),
             "smoker":forms.RadioSelect(attrs={"class":"btn-check"})
         }
     #'SUPER'   Function
     def __init__(self, *args, **kwargs):
         super(CandidateForm, self).__init__(*args, **kwargs)
         
-        # ########### CONTROL PANEL (Optional Method to control) ##########
-            #input required
-        # 1) self.fields["message"].required = True
-            #input disable
-        # 2) self.fields["experience"].disabled = True
-            #input readonly
-        # 3) self.fields["job"].widget.attrs.update({"readonly":"readonly"})
+        # ########### CONTROL PANEL (individual <inputs> )  ########## |            
+        # 1)  INPUT REQUIRED
+        # self.fields["message"].required = True
         
-        self.fields["phone"].max__length= 12
+        # 2) INPUT DISABLE
+        # self.fields["experience"].disabled = True
         
-        # ########### SELECT PANEL  ########## |
+        # 3) INPUT READONLY
+        # self.fields["job"].widget.attrs.update({"readonly":"readonly"})
+        
+        
+        # 4) SELECT OPTION  
             #creating placeholder for select inputs
         # self.fields["personality"].choices = [("","Select a personality"),] +list(self.fields["personality"].choices)[1:]
         
         
-        # ########### WIDGET PANEL  ########## |
+        # 5) WIDGET PANEL  (inside/outside)
+        # self.fields["phone"].widget.attrs.update({"style": "font-size:px;", "data-mask": "+(237) 0000-0000-000"})
         
-        self.fields["phone"].widget.attrs.update({"style": "font-size:px;", "data-mask": "+(237) 0000-0000-000"})
         
+       # ########### CONTROL PANEL (multiple <inputs> ) ########## |
         
-        # ########### READONLY/DISABLED BY 'FOR' LOOPING IN ARRAY PANEL  ########## |
+        # 1) READONLY
+        # readonly = ["firstname", "lastname", "job"]
+        # for field in readonly:
+            # self.fields[field].widget.attrs["readonly"] = True
         
-        # 1) Readonly
-        readonly = ["firstname", "lastname", "job"]
-        
-        for field in readonly:
-            self.fields[field].widget.attrs["readonly"] = True
-        
-        # 2) Disable
-        disabled = ["personality", "salary", "smoker", "gender", "experience"]
-        for field in disabled:
-            self.fields[field].widget.attrs["disabled"] = True
+        # 2) DISABLE
+        # disabled = ["personality", "salary", "smoker", "gender", "experience"]
+        # for field in disabled:
+            # self.fields[field].widget.attrs["disabled"] = True

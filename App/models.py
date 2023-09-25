@@ -7,7 +7,7 @@ SITUATION = (
 )
 
 PERSONALITY =(
-    # ("","Select a personality"),
+    ("","Select a personality"),
     ("I am outgoing","I am outgoing"),
     ("I am sociable","I am sociable"),
     ("I am antisocial","I am antisocial"),
@@ -33,14 +33,16 @@ class Candidate(models.Model):
                                    choices=SMOKER)
     email = models.EmailField(max_length=50)
     message = models.TextField()
+    file = models.FileField()
     created_at = models.DateTimeField(auto_now_add=True)
     situation = models.CharField(max_length=50, null=True, choices=SITUATION, default="Pending")
     
     
-    def clean(self):
-        self.firstname = self.firstname.capitalize()
-        self.lastname = self.lastname.capitalize()
     
     def __str__(self):
         return self.firstname
     
+    #capitalize Fname and Lname at the backend
+    def clean(self):
+        self.firstname = self.firstname.capitalize()
+        self.lastname = self.lastname.capitalize()

@@ -5,9 +5,9 @@
     <div class="card p-3 border-dark text-center alert alert-warning" styl="font-size: 18px;">
         Frontend: FR-22 &nbsp; |&nbsp; Frontend: BA-10 &nbsp; | &nbsp; Fullstack: FU-22 
     </div>
-    <form action="" method="post" class="card p-3 mt-5" novalidate>
+    <form action="" method="post" class="card p-3 mt-5" enctype="multipart/form-data" novalidate>
         {% csrf_token %}
-        
+        <!-- {{form|crispy}} -->
         <div class="row">
             <div class="col-4">{{form.firstname|as_crispy_field}}</div>
             <div class="col-4">{{form.lastname|as_crispy_field}}</div>
@@ -29,9 +29,10 @@
         {{form.experience|as_crispy_field}}
         <hr style="border: 1px solid #007bff; margin-top: -15px;">
         {{form.message|as_crispy_field}}
+        {{form.file|as_crispy_field}}
         
         <hr style="border: 1px solid #007bff;">
-        <button type="submit" class=" btn btn-outline-primary"style="width:90px;">Submit</button>
+        <button type="submit" class=" btn btn-outline-primary btn-sm"style="width:90px;">Submit</button>
     </form>
 
     
