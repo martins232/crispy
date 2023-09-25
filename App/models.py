@@ -7,7 +7,7 @@ SITUATION = (
 )
 
 PERSONALITY =(
-    ("","Select a personality"),
+    # ("","Select a personality"),
     ("I am outgoing","I am outgoing"),
     ("I am sociable","I am sociable"),
     ("I am antisocial","I am antisocial"),
@@ -23,7 +23,7 @@ class Candidate(models.Model):
     lastname = models.CharField(max_length=50)
     job = models.CharField(max_length=5)
     age = models.CharField(max_length=3)
-    phone = models.CharField(max_length=25)
+    phone = models.CharField(max_length=20)
     personality = models.CharField(max_length=50, null=True,
                                    choices=PERSONALITY)
     salary = models.CharField(max_length=50)

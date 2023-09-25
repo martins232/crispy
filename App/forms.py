@@ -84,6 +84,15 @@ class CandidateForm(forms.ModelForm):
         exclude =["created_at", "situation"]
         # fields = ["firstname", "lastname", "job", "email", "age","phone", "message"]
         
+        #Creating a controll for labels
+        
+        labels ={
+            "phone":"Enter Phone",
+            "salary":"What is your salary expectation",
+            "personality":"What is your personality",
+            "gender":"Select your gender",
+            "smoker":"Do you smoke?"
+        }
         
         SALARY = (
             ("", "Salary expectation {month}"),
@@ -119,3 +128,39 @@ class CandidateForm(forms.ModelForm):
             "gender":forms.RadioSelect(choices=GENDER, attrs={"class":"btn-check"}),
             "smoker":forms.RadioSelect(attrs={"class":"btn-check"})
         }
+    #'SUPER'   Function
+    def __init__(self, *args, **kwargs):
+        super(CandidateForm, self).__init__(*args, **kwargs)
+        
+        # ########### CONTROL PANEL (Optional Method to control) ##########
+            #input required
+        # 1) self.fields["message"].required = True
+            #input disable
+        # 2) self.fields["experience"].disabled = True
+            #input readonly
+        # 3) self.fields["job"].widget.attrs.update({"readonly":"readonly"})
+        
+        self.fields["phone"].max__length= 12
+        
+        # ########### SELECT PANEL  ########## |
+            #creating placeholder for select inputs
+        # self.fields["personality"].choices = [("","Select a personality"),] +list(self.fields["personality"].choices)[1:]
+        
+        
+        # ########### WIDGET PANEL  ########## |
+        
+        self.fields["phone"].widget.attrs.update({"style": "font-size:px;", "data-mask": "+(237) 0000-0000-000"})
+        
+        
+        # ########### READONLY/DISABLED BY 'FOR' LOOPING IN ARRAY PANEL  ########## |
+        
+        # 1) Readonly
+        readonly = ["firstname", "lastname", "job"]
+        
+        for field in readonly:
+            self.fields[field].widget.attrs["readonly"] = True
+        
+        # 2) Disable
+        disabled = ["personality", "salary", "smoker", "gender", "experience"]
+        for field in disabled:
+            self.fields[field].widget.attrs["disabled"] = True
