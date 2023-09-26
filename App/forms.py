@@ -1,5 +1,5 @@
 from django import forms
-from . models import Candidate
+from . models import Candidate, SMOKER
 from django.core.validators import RegexValidator
 
 # Every letters to lowercase
@@ -157,7 +157,7 @@ class CandidateForm(forms.ModelForm):
             ), 
             "personality": forms.Select(attrs={"style": "font-size : 13px;"}),
             "gender":forms.RadioSelect(choices=GENDER, attrs={"class":"btn-check",}),
-            "smoker":forms.RadioSelect(attrs={"class":"btn-check"})
+            "smoker":forms.RadioSelect(choices=SMOKER ,attrs={"class":"btn-check"})
         }
     #'SUPER'   Function
     def __init__(self, *args, **kwargs):
