@@ -104,3 +104,14 @@ class Candidate(models.Model):
     def clean(self):
         self.firstname = self.firstname.capitalize()
         self.lastname = self.lastname.capitalize()
+
+    
+    # concatenate firstname and last anme in the admin table
+    def name(self):
+        return f"{self.firstname} {self.lastname}"
+    
+    #concatenate (i want to make the subheading after clicking the user to be his/her first and last name)
+    
+    
+    def __str__(self):
+        return self.firstname + " " + self.lastname

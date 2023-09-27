@@ -9,9 +9,17 @@ class CandidateAdmin(admin.ModelAdmin):
     readonly_fields = ["firstname", "lastname", "job","email" , "age","phone","personality","salary", "gender", "experience", "smoker","file", "frameworks", "languages", "databases", "libraries", "mobile", "others"]
     exclude= ["status"]
     list_filter = ["situation"]
-    list_display = ["firstname", "lastname", "job","email" , "age", "created_at", "status", "_"]
+    list_display = ["name", "job","email" , "file", "age", "created_at", "status", "_"]
     search_fields = ["firstname", "lastname","email", "situation"]
     list_per_page = 10
+    
+    # Function to hide Fname and Lname when you click candidate
+    def get_fields(self, request, obj):
+        fields= super().get_fields(request, obj)
+        if obj:
+            fields.remove("firstname")
+            fields.remove("lastname")
+        return fields
     
     
     #Function to change the icons
