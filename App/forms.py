@@ -23,6 +23,7 @@ class CandidateForm(forms.ModelForm):
         max_length=50,
         # required=False,
         validators=[RegexValidator(r"^[a-zA-Z]*$", message="Only letters are allowed")], 
+        error_messages= {"required": "Firstname cannot be empty"},
         widget=forms.TextInput(attrs={
             "placeholder":"Enter First name",
             "style": "font-size : 13px; text-transform: capitalize;"            
@@ -44,6 +45,8 @@ class CandidateForm(forms.ModelForm):
     job = UpperCase(
         label="Job code",
         min_length=5, max_length=5,
+        error_messages= {"required": "Job cannot be empty"},
+
         widget=forms.TextInput(attrs={
             "placeholder":"Example : FR-22",
             "style": "font-size : 13px; text-transform: uppercase;"
@@ -183,6 +186,11 @@ class CandidateForm(forms.ModelForm):
         # 5) WIDGET PANEL  (inside/outside)
         # self.fields["phone"].widget.attrs.update({"style": "font-size:px;", "data-mask": "+(237) 0000-0000-000"})
         
+        # 6) Erro messages
+        # self.fields["firstname"].error_messages.update({
+        #     "required": "Please your firstname is required"
+        # })
+        
         
        # ########### CONTROL PANEL (multiple <inputs> ) ########## |
         
@@ -195,6 +203,20 @@ class CandidateForm(forms.ModelForm):
         # disabled = ["personality", "salary", "smoker", "gender", "experience"]
         # for field in disabled:
             # self.fields[field].widget.attrs["disabled"] = True
+            
+        # 3) ERROR MESSAGES
+        # error_messages = ["firstname", "lastname", "job", "email", "age", "phone", "personality", "salary", "smoker", "gender", "smoker"]
+        # for field in error_messages:
+        #     self.fields[field].error_messages.update({
+        #     "required": "Django field is required"
+        # })
+        
+        # 2) FONT Size
+        font_size = ["firstname", "lastname", "job", "email", "age", "phone", "personality", "salary"]
+        for field in font_size:
+            self.fields[field].widget.attrs.update({"style":"font-size: 15px;"}) 
+            
+                        
     #__________________________ END SUPERFUNCTION____________________
     
     # FUNCTION TO PREVENT DUPLICATE ENTRIES

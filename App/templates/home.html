@@ -2,11 +2,45 @@
 {% load crispy_forms_tags %}
 {% block content %}
 <div class="container mt-3" style="width: 95%; font-size: 14px;">
+    <!-- 1) (ALL FIELDS) Error messages from (form.py) ) 
+    {% for field in form %}
+    
+        {% for error  in field.errors %}
+        <div class=" alert alert-danger alert-dismissible fade show text-center" role="alert">
+            <strong>{{error|escape}}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    {% endfor %}  -->
+
+    <!--  2) (INDIVIDUAL) Error message from (form.py) )  -->
+    <!-- -- Note (striptags) this filter removes the <li> from msg  -->
+    {% if form.errors %}
+        <div class=" alert alert-danger alert-dismissible fade show text-center" role="alert">
+            <!-- ---- {{form.email.errors | striptags}} How to add line break--- -->
+            <strong>{{form.email.errors}}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+    
+
+    <!-- 3) (OPTIONAL INDIVIDUAL (SweetAlert) But using JS)  -->
+    <!-- {% if form.errors %}
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        var a= "{{form.email.errors|striptags}}";
+        swal("Denied!", a, "error")
+    </script> -->
+
+    {% endif %}
+
+
+    <!-- Message for backend view.py -->
     <div class="text-center">
         {% for message in messages %}
             {% if message.tags == "success" %}
             <div class=" alert alert-success alert-dismissible fade show" role="alert">
-                {{message}}
+                <strong>{{message}}</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             {% endif %}
