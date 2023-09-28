@@ -88,8 +88,8 @@ class Candidate(models.Model):
     file = models.FileField()
     created_at = models.DateTimeField(auto_now_add=True)
     situation = models.CharField(max_length=50, null=True, choices=SITUATION, default="Pending")
+    company_note = models.TextField(blank=True)
     #Multiple checkboxes
-    
     frameworks = MultiSelectField(max_length =25, choices=FRAMEWORKS, default= "")
     languages = MultiSelectField(max_length =25,choices=LANGUAGES, default= "")
     databases = MultiSelectField(max_length =25, choices=DATABASES, default= "")

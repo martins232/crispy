@@ -41,7 +41,7 @@ class CandidateForm(forms.ModelForm):
             "style": "font-size : 13px; text-transform: capitalize;"            
             })
         )  
-    # Job code always in uppercase for the server as done above and also here too in widget
+    # Job code always in uppercase for the server as done above and also here too in widget for client side
     job = UpperCase(
         label="Job code",
         min_length=5, max_length=5,
@@ -49,7 +49,8 @@ class CandidateForm(forms.ModelForm):
 
         widget=forms.TextInput(attrs={
             "placeholder":"Example : FR-22",
-            "style": "font-size : 13px; text-transform: uppercase;"
+            "style": "font-size : 13px; text-transform: uppercase;",
+            "data-mask": "AA-00"
         })
     )
     
@@ -62,7 +63,8 @@ class CandidateForm(forms.ModelForm):
         validators=[RegexValidator(r"^[a-zA-Z0-9.+-_]+@[a-zA-Z0-9.+-_]+\.[a-zA-Z]*$", message="Enter a valid email address")], 
         widget=forms.TextInput(attrs={
             "placeholder":"Email Address",
-            "style": "font-size : 13px; text-transform: lowercase;"
+            "style": "font-size : 13px; text-transform: lowercase;",
+            # "autocomplete": "off" -----already done in supr func
             })
         )
     
@@ -211,15 +213,23 @@ class CandidateForm(forms.ModelForm):
         #     "required": "Django field is required"
         # })
         
-        # 2) FONT Size
-        font_size = ["firstname", "lastname", "job", "email", "age", "phone", "personality", "salary"]
-        for field in font_size:
-            self.fields[field].widget.attrs.update({"style":"font-size: 15px;"}) 
+        # 4) FONT SIZE
+        # font_size = ["firstname", "lastname", "job", "email", "age", "phone", "personality", "salary"]
+        # for field in font_size:
+        #     self.fields[field].widget.attrs.update({"style":"font-size: 15px;"}) 
+        
+        # 4) AUTO COMPLETE = OFF (Input History)
+        # aut_complete = ["firstname", "lastname", "email", "phone"]
+        # for field in aut_complete:
+        #     self.fields[field].widget.attrs.update({"autocomplete":"off"}) 
             
                         
     #__________________________ END SUPERFUNCTION____________________
     
-    # FUNCTION TO PREVENT DUPLICATE ENTRIES
+    
+    #_______________________FUNCTION (METHOD CLEAN) ____________________
+    
+    # 1) FUNCTION TO PREVENT DUPLICATE ENTRIES
     # Method 1 (loop for)
     # def clean_email(self):
     #     email= self.cleaned_data.get("email")
@@ -234,3 +244,27 @@ class CandidateForm(forms.ModelForm):
         if Candidate.objects.filter(email=email).exists():
             raise forms.ValidationError("Denied! " + email + " is already registered")
         return email
+    
+    
+    # 2) JOB CODE (Job code validation)
+    def clean_job(self):
+        job = self.cleaned_data.get("job")
+        if job == "FR-22" or job == "BA-10" or job == "FU-22":
+            return job
+        else: 
+            raise forms.ValidationError(job +" role not presently available")
+    
+    # 3) AGE (Range: 15-35)
+    def clean_age(self):
+        age = int(self.cleaned_data.get("age"))
+        if age>15 and age<=35:
+            return age
+        else: 
+            raise forms.ValidationError("Age must be between 15-35. Your age is: "+ str(age))
+    
+    # 4) PHONE (Prevent incomplete values):
+    def clean_phone(self):
+        phone = self.cleaned_data.get("phone")
+        if len(phone) != 20:
+            raise forms.ValidationError("Incomplete number: +(234) 0000-0000-000")
+        return phone
