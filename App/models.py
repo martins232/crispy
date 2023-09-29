@@ -70,25 +70,38 @@ OTHERS = (
     ("Others","Others")
 )
 
+STATUS_CHOICE = (
+    ("","Select your status"),
+    ("I am studying", "I am studying"),
+    ("I took a break", "I took a break"),
+    ("Completed", "Completed")
+)
+
+
 class Candidate(models.Model):
+    # PERSONAL CARD 1
     firstname = models.CharField(max_length=50)
     lastname = models.CharField(max_length=50)
-    job = models.CharField(max_length=5)
-    age = models.CharField(max_length=3)
+    job = models.CharField(max_length=5, verbose_name="Job code")
+    # age = models.CharField(max_length=3)
+    birth = models.DateField(auto_now=False, auto_now_add=False, verbose_name="Birthday")
     phone = models.CharField(max_length=20)
     personality = models.CharField(max_length=50, null=True,
                                    choices=PERSONALITY)
-    salary = models.CharField(max_length=50)
+    salary = models.CharField(max_length=50, verbose_name="Salary expectation")
     gender = models.CharField(max_length=10)
     experience = models.BooleanField(null=True)
     smoker = models.CharField(max_length=50, default="",
                                    choices=SMOKER)
     email = models.EmailField(max_length=50)
-    message = models.TextField()
-    file = models.FileField()
+    message = models.TextField(verbose_name="Presentation")
+    file = models.FileField(upload_to="resume", blank=True, verbose_name="Reume")
+    image = models.FileField(upload_to="photo", blank=True, verbose_name="Photo")
     created_at = models.DateTimeField(auto_now_add=True)
     situation = models.CharField(max_length=50, null=True, choices=SITUATION, default="Pending")
     company_note = models.TextField(blank=True)
+    
+     # SKILLS CARD 2
     #Multiple checkboxes
     frameworks = MultiSelectField(max_length =25, choices=FRAMEWORKS, default= "")
     languages = MultiSelectField(max_length =25,choices=LANGUAGES, default= "")
@@ -96,6 +109,25 @@ class Candidate(models.Model):
     libraries = MultiSelectField(max_length =25,choices=LIBRARIES, default= "")
     mobile = MultiSelectField(max_length =25, choices=MOBILE, default= "")
     others = MultiSelectField(max_length =25, choices=OTHERS, default= "")
+    
+     # EDUCATIONAL CARD 3
+    institution = models.CharField(max_length=50)
+    course = models.CharField(max_length=50)
+    started_course = models.DateField(auto_created=False, auto_now_add=False)
+    finished_course = models.DateField(auto_created=False, auto_now_add=False)
+    about_course = models.TextField()
+    status_course = models.CharField(max_length=50, choices=STATUS_CHOICE)
+     
+      # PROFESSIONAL CARD 4
+    company = models.CharField(max_length=50)
+    position = models.CharField(max_length=50)
+    started_job = models.DateField(auto_created=False, auto_now_add=False)
+    finished_job = models.DateField(auto_created=False, auto_now_add=False)
+    about_job = models.TextField()
+    employed = models.BooleanField(null=True, verbose_name="I am employed")
+    remote = models.BooleanField(null=True, verbose_name="I agree to work remotely")
+    travel = models.BooleanField(null=True, verbose_name="I am available to travel")
+    
     
     def __str__(self):
         return self.firstname

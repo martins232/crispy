@@ -6,12 +6,31 @@ from django.utils.html import format_html
 class CandidateAdmin(admin.ModelAdmin):
     radio_fields = {"smoker": admin.HORIZONTAL}
     form = CandidateForm
-    readonly_fields = ["firstname", "lastname", "job","email" , "age","phone","personality","salary", "gender", "experience", "smoker","file", "frameworks", "languages", "databases", "libraries", "mobile", "others"]
-    exclude= ["status"]
+    exclude= ["status"] # remove status from admin form
     list_filter = ["situation"]
-    list_display = ["name", "job","email" , "file", "age", "created_at", "status", "_"]
+    list_display = ["name", "job","email" , "file", "created_at", "status", "_"]
     search_fields = ["firstname", "lastname","email", "situation"]
     list_per_page = 10
+    
+    
+    #readonly section
+    readonly_fields = ["firstname", "lastname", "experience", "gender","job","email" ,"phone","salary",'birth',"personality",  "smoker","file", "image", "frameworks", "languages", "databases", "libraries", "mobile", "others",'institution','status_course', 'course', 'started_course', 'finished_course', 'about_course',  'company', 'position', 'started_job', 'finished_job', 'about_job', 'employed', 'remote', 'travel', ]
+    
+    
+    fieldsets = [
+        #HR OPERATIONS
+        ("HR OPERATIONS", {"fields": ["situation", "company_note"]}),
+        
+        ("PERSONAL", {"fields":["experience", "gender","job","email" ,"phone","salary",'birth',"personality",  "smoker", "image", "file"]}),
+        
+        ("CANDIDATE SKILLS", {"fields":["frameworks", "languages", "databases", "libraries", "mobile", "others"]}),
+        
+        ("EDUCATIONAL BACKGROUND", {"fields":['institution','status_course', 'course', 'started_course', 'finished_course', 'about_course']}),
+        
+        ("OTHERS",{"fields":['company', 'position', 'started_job', 'finished_job', 'about_job', ]}),
+        
+        ("NOTE",{"fields":["employed",'remote', 'travel']}),
+    ]
     
     # Function to hide Fname and Lname when you click candidate
     def get_fields(self, request, obj):
@@ -22,8 +41,8 @@ class CandidateAdmin(admin.ModelAdmin):
         return fields
     
     
-    #Function to change the icons
-    def _(self, obj): #_ was used so that you can get values for none
+    #Function to change the icons. N.B if you are assigning new values use (self, var)
+    def _(self, obj): #_ was used so that you can get values for None
         if obj.situation == "Approved":
             return True
         elif obj.situation == "Pending":
@@ -44,6 +63,8 @@ class CandidateAdmin(admin.ModelAdmin):
     status.allow_tags = True
             
         
-    
-    
+  
 admin.site.register(Candidate, CandidateAdmin)
+
+
+

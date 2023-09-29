@@ -4,6 +4,7 @@ from  django.http import HttpResponseRedirect
 from django.contrib import messages
 
 
+
 def home(request):
     if request.method == "POST":
         form = CandidateForm(request.POST, request.FILES)
